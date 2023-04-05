@@ -3,6 +3,6 @@ name = "autosat"
 version = "0.1.0"
 edition = "2021"
 description = "Automatic conversion of functions to CNF for SAT solving"
-license = "CC0"
+license = "CC0-1.0"
 
 [dependencies]
