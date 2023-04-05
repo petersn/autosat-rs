@@ -95,14 +95,14 @@ pub fn convert_to_cnf(
   for i in 0..2usize.pow(num_inputs as u32) {
     let input: Vec<bool> = (0..num_inputs).map(|j| (i >> j) & 1 == 1).collect();
     let output = f(&input);
-    let base_index = i << num_outputs;
     match output {
       SatOutput::Bits(bits) => {
-        allowed_behavior_lookup[base_index + bits_to_num(&bits)] = true;
+        assert!(bits.len() == num_outputs);
+        allowed_behavior_lookup[i + (bits_to_num(&bits) << num_inputs)] = true;
       }
       SatOutput::DontCare => {
         for j in 0..2usize.pow(num_outputs as u32) {
-          allowed_behavior_lookup[base_index + j] = true;
+          allowed_behavior_lookup[i + (j << num_inputs)] = true;
         }
       }
       SatOutput::ImpossibleInputs => {}
