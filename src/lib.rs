@@ -145,39 +145,6 @@ pub fn convert_to_cnf(
   let mut behavior_to_remove = vec![];
   fill_with_ones(&mut behavior_to_remove, settings_to_rule_out.len());
 
-  // // Find all clauses that don't rule out any allowed behavior ("feasible" clauses).
-  // let mut feasible_clauses: Vec<Vec<SatLiteral>> = Vec::new();
-  // 'clause_loop: for mut clause_index in 0..3usize.pow(bit_count as u32) {
-  //   let mut clause = Vec::new();
-  //   for bit_index in 0..bit_count {
-  //     match clause_index % 3 {
-  //       0 => clause.push(-(bit_index as SatLiteral + 1)),
-  //       1 => clause.push(bit_index as SatLiteral + 1),
-  //       2 => {}
-  //       _ => unreachable!(),
-  //     }
-  //     clause_index /= 3;
-  //   }
-
-  //   // Check if this clause rules out any allowed behavior.
-  //   'allowed_loop: for (i, allowed) in allowed_behavior_lookup.iter().enumerate() {
-  //     if *allowed {
-  //       // Make sure at least one literal in the clause is satisfied.
-  //       for &literal in &clause {
-  //         let bit = (i >> (literal.abs() as usize - 1)) & 1 == 1;
-  //         if (literal > 0) == bit {
-  //           continue 'allowed_loop;
-  //         }
-  //       }
-  //       // If we get here, the clause rules out this allowed behavior.
-  //       continue 'clause_loop;
-  //     }
-  //   }
-
-  //   feasible_clauses.push(clause);
-  // }
-  // println!("Found {} feasible clauses", feasible_clauses.len());
-
   let mut cnf = Cnf::new();
 
   for current_max_length in 1.. {
