@@ -210,7 +210,6 @@ pub fn convert_to_cnf(
       positive_clauses_by_length[current_max_length].len(),
       polarities
     );
-    println!("      Clauses: {:?}", positive_clauses_by_length[current_max_length]);
 
     let mut feasible_useful_clauses_of_this_length: Vec<SatClause> = Vec::new();
     let mut current_clause = vec![0; current_max_length];
@@ -301,7 +300,15 @@ mod tests {
   use super::*;
 
   #[test]
-  fn it_works() {
-    
+  fn synthesize_xor_gate() {
+    let xor_gate = convert_to_cnf(
+      2, 1, |input| SatOutput::Bits(vec![input[0] ^ input[1]]),
+    );
+    assert_eq!(xor_gate, vec![
+      vec![-1, -2, -3],
+      vec![1, 2, -3],
+      vec![1, -2, 3],
+      vec![-1, 2, 3],
+    ]);
   }
 }
