@@ -189,8 +189,6 @@ pub fn convert_to_cnf(
     let polarities = 2usize.pow(current_max_length as u32);
 
     // Filter down settings_to_rule_out and behavior_to_remove.
-    println!("  Settings to rule out: {:?}", settings_to_rule_out);
-    println!("  Behavior to remove: {:?}", behavior_to_remove);
     settings_to_rule_out = settings_to_rule_out
       .into_iter()
       .enumerate()
@@ -202,7 +200,6 @@ pub fn convert_to_cnf(
       })
       .collect();
     fill_with_ones(&mut behavior_to_remove, settings_to_rule_out.len());
-    println!("  POST Settings to rule out: {}", settings_to_rule_out.len());
     println!(
       "  Clauses so far: {} - Current max length: {} -- Remaining weight: {}",
       cnf.len(), current_max_length, remaining_weight,
@@ -231,11 +228,9 @@ pub fn convert_to_cnf(
         let useful = test_useful(
           &current_clause, &settings_to_rule_out
         );
-        println!("      Testing clause: {:?}, feasible = {}, useful = {}", current_clause, feasible, useful);
         if test_feasible_and_useful(
           max_setting, &current_clause, &allowed_behavior_lookup, &settings_to_rule_out
         ) {
-          println!("      Clause is feasible and useful: {:?}", current_clause);
           feasible_useful_clauses_of_this_length.push(current_clause.clone());
         }
       }
@@ -258,7 +253,6 @@ pub fn convert_to_cnf(
     for (row_idx, clause) in feasible_useful_clauses_of_this_length.iter().enumerate() {
       let row = get_row!(row_idx);
       for (col_idx, &setting) in settings_to_rule_out.iter().enumerate() {
-        println!("  mat[{}, {}] = evaluate_clause({:?}, {}) = {}", row_idx, col_idx, clause, setting, evaluate_clause(&clause, setting));
         if !evaluate_clause(&clause, setting) {
           set_bit(row, col_idx);
         }
@@ -296,11 +290,6 @@ pub fn convert_to_cnf(
       if any == 0 {
         break;
       }
-      // Print the remaining pop-count.
-      println!(
-        "      Remaining pop-count: {}",
-        behavior_to_remove.iter().map(|&x| x.count_ones()).sum::<u32>()
-      );
     }
   }
 
@@ -313,7 +302,6 @@ mod tests {
 
   #[test]
   fn it_works() {
-    let and_gate = convert_to_cnf(2, 1, |input| SatOutput::Bits(vec![input[0] && input[1]]));
-    println!("{:?}", and_gate);
+    
   }
 }
